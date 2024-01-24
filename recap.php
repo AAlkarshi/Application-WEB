@@ -17,7 +17,7 @@
 	<?php require "nav.php";  ?>
 	
 <?php
-	if(!isset($_SESSION['tableaux']) || empty($_SESSION['tableaux'])){
+	if(!isset($_SESSION['produits']) || empty($_SESSION['produits'])){
 		echo "<p> Aucun produit en session...</p>";
 	}
 	else{
@@ -32,12 +32,13 @@
 						"<th>Suppression</th>",
 					"</tr>",
 				"</thead>",
+
 			"<tbody>";
 
 		$totalGeneral = 0;
 		$totalQuantite = 0;
 
-		foreach ($_SESSION['tableaux'] as $index => $tableau) {
+		foreach ($_SESSION['produits'] as $index => $tableau) {
 		echo "<tr>",
 				"<td>" . $index . "</td>",
 				"<td>" . $tableau['produit'] . "</td>",
@@ -46,40 +47,35 @@
 				"<td>".number_format($tableau['prix'],2,",","&nbsp;")."&nbsp;€</td>",
 
 				// BTN -
-				"<td name='BtnDiminution'> <a href=> - </a> </td>",
+				"<td> <a href='traitement.php?action=BtnDiminution&id=$index''> - </a> </td>",
 	
 				//QUANTITE
 				"<td>" . $tableau['quantite'] . "</td>",
 
 				// BTN +
-				"<td name='BtnAugmentation'> <a href=> + </a> </td>",
+				"<td> <a href='traitement.php?action=BtnAugmentation&id=$index'> + </a> </td>",
 
 				//TOTAL
 				"<td>".number_format($tableau['total'],2,",","&nbsp;")."&nbsp;€</td>",
 
 				//SUPP CE PRODUIT
 				"<td > 
-					<a name='BtnSuppCeProduit' href=> Supprimer ce produit </a> 
-				</td>",
-
-					
+					<a href='traitement.php?action=suppProduit&id=$index'> Supprimer ce produit </a> 
+				</td>",	
 			"</tr>";
 					
 					$totalGeneral += $tableau['total'];
 					$totalQuantite += $tableau['quantite'];
-			}
+		}
 
 			echo "<tr>",
-					"<td colspan=4> Total des Quantité : </td>",
+					"<td colspan=2> Total des Quantité : </td>",
 					"<td> <strong>". number_format($totalQuantite,0,",","&nbsp;")."&nbsp;</strong></td>",
-					"<td colspan=4> Total géneral : </td>",
+					"<td colspan=2> Total géneral : </td>",
 					"<td> <strong>". number_format($totalGeneral,2,",","&nbsp;")."&nbsp;€</strong> </td>" ,
 
 	
-			"<td > 
-			<a name='BtnSuppTOUTlesProduits'href=> Supprimer tout les produits</a>
-			</td>",
-
+			"<td> <a href='traitement.php?action=viderPanier'> Supprimer tout les produits</a> </td>",
 				 "</tr>",
 			 "</tbody>",
 		"</table>";

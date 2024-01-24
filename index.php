@@ -27,6 +27,7 @@ session_start();
 	    unset($_SESSION['message']); 
 	}
 ?>
+<!-- ?action=add -->
 
 	<form action="traitement.php?action=add" method="post">
 		<p>
@@ -41,20 +42,13 @@ session_start();
 		</p>
 		<p>
 			<label> Quantité voulu : 
-				<input type="text" name="quantite"> 
+				<input type="number" name="quantite"> 
 			</label>
 		</p>
 		<p>
 				<input type="submit" name="submit" value="Ajouter le produit">
 		</p>
 	</form>
-
-
-
-
-
-
-
 
 </body>
 </html>
