@@ -59,7 +59,7 @@
 				"<td>".number_format($tableau['total'],2,",","&nbsp;")."&nbsp;€</td>",
 
 				//SUPP CE PRODUIT
-				"<td > 
+				"<td> 
 					<a href='traitement.php?action=suppProduit&id=$index'> Supprimer ce produit </a> 
 				</td>",	
 			"</tr>";
