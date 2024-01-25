@@ -27,7 +27,8 @@ session_start();
 	    unset($_SESSION['message']); 
 	}
 ?>
-<!-- ?action=add -->
+
+
 
 	<form action="traitement.php?action=add" method="post">
 		<p>

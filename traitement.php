@@ -3,7 +3,16 @@
 	$id = (isset($_GET["id"])) ? $_GET["id"] : null;
 	$quantite = (isset($_GET["quantite"])) ? $_GET["quantite"] : null;
 
+
+
 if(isset($_GET['action'])){
+
+	if (isset($_SESSION['message'])) {
+	    echo "<p>{$_SESSION['message']}</p>";
+
+	    //unset DESACTIVE une variable
+	    unset($_SESSION['message']); 
+	}
 
 	switch ($_GET['action']) { 
 
@@ -35,7 +44,7 @@ if(isset($_GET['action'])){
 		case 'suppProduit':
 			unset($_SESSION['produits'][$id]);
 			header("Location:recap.php");
-			echo "Un produit vient d'être supprimer";
+			$_SESSION['message'] = "Un produit vient d'être supprimer";
 			break;
 
 
@@ -43,8 +52,8 @@ if(isset($_GET['action'])){
 		// SUPPRIMER TOUT LES PRODUITS
 		case 'viderPanier':
 			unset($_SESSION['produits']);
-			echo "Tout les produits viennent d'être retirer de votre Récapitulatif";
 			header("Location:recap.php");
+			$_SESSION['message'] = "Tout les produits viennent d'être retirer de votre Récapitulatif";
 			break;
 
 
@@ -52,11 +61,14 @@ if(isset($_GET['action'])){
 			
 		// Augmentations des quantités
 		case 'BtnAugmentation':
-			if (isset($_SESSION['produits'] [$id][$quantite])){
-				$_SESSION['produits'][$id][$quantite]++;
-			}
-			header("Location:recap.php");
-			break;
+    		if (isset($_SESSION['produits'] [$id])) {
+        		$_SESSION['produits'][$id]['quantite']++;
+        		$_SESSION['produits'][$id]['total'] = 
+        			$_SESSION['produits'][$id]['prix'] * $_SESSION['produits'][$id]['quantite'];
+    		}
+    	header("Location:recap.php");
+    	$_SESSION['message'] = "Un produit vient d'être rajouter au stock";
+    	break;
 
 
 
@@ -64,9 +76,23 @@ if(isset($_GET['action'])){
 
 		// Diminutions des quantités
 		case 'BtnDiminution':
-			  
-			break;
-
+			 if (isset($_SESSION['produits'] [$id])) {
+			 	if ($_SESSION['produits'][$id]['quantite'] > 1) {
+	        		$_SESSION['produits'][$id]['quantite']--;
+	        		
+	        		$_SESSION['produits'][$id]['total'] = 
+	        		$_SESSION['produits'][$id]['prix'] * $_SESSION['produits'][$id]['quantite'];
+    			}
+    			else {
+    			unset($_SESSION['produits'][$id]);
+				$_SESSION['message'] = "Un produit vient d'être supprimer totalement du récapitulatif";
+    			}
+    		
+    	
+    	header("Location:recap.php");
+    	$_SESSION['message'] = "Un produit vient d'être retirer du stock";
+		break;
+	}
 	}
 }
 
