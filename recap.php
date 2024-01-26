@@ -1,20 +1,10 @@
 <?php
 	session_start();
+	ob_start();
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="stylesheet" type="text/css" href="index.css">
-	<title> Application Web - Récapitulatif des Produits </title>
-</head>
-<body>
-
 	<h3> Récapitulatif des Produits </h3>
 
-	<?php require "nav.php";  ?>
+	<?php $title = "Récapitulatif"; ?>
 	
 <?php
 	if(!isset($_SESSION['produits']) || empty($_SESSION['produits'])){
@@ -67,23 +57,24 @@
 					$totalGeneral += $tableau['total'];
 					$totalQuantite += $tableau['quantite'];
 		}
-
 			echo "<tr>",
 					"<td colspan=2> Total des Quantité : </td>",
 					"<td> <strong>". number_format($totalQuantite,0,",","&nbsp;")."&nbsp;</strong></td>",
 					"<td colspan=2> Total géneral : </td>",
 					"<td> <strong>". number_format($totalGeneral,2,",","&nbsp;")."&nbsp;€</strong> </td>" ,
-
-	
 			"<td> <a href='traitement.php?action=viderPanier'> Supprimer tout les produits</a> </td>",
 				 "</tr>",
 			 "</tbody>",
 		"</table>";
 	}
 	
+
+
+
+
+$content = ob_get_clean();
+require_once "template.php";
+
+
 ?>
-
-
-</body>
-</html>
 

@@ -6,8 +6,9 @@
 <body>
 	<nav>
 		<ul>
-			<li> <a href="index.php" name="BtnAccueil"> Accueil </a> </li> 
-			<li> <a href="recap.php" name="BtnRecap">  Récapitulatif </a> </li>
+			<li> <a href="home.php"> Home </a> </li> 
+			<li> <a href="index.php"> Accueil </a> </li> 
+			<li> <a href="recap.php">  Récapitulatif </a> </li>
 		</ul>
 	</nav>
 </body>
