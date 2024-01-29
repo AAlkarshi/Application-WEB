@@ -1,11 +1,7 @@
 <?php
 	session_start();
 	$id = (isset($_GET["id"])) ? $_GET["id"] : null;
-	$quantite = (isset($_GET["quantite"])) ? $_GET["quantite"] : null;
-	$description = (isset($_GET["description"])) ? $_GET["description"] : null;
-
-
-
+	
 if(isset($_GET['action'])){
 
 	if (isset($_SESSION['message'])) {
