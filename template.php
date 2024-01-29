@@ -9,17 +9,57 @@
 	<link rel="stylesheet" href="index.css">
 
 
-	
 	<title><?php echo $title; ?></title>
-
+	
+	
 
 </head>
 <body>
-<?php require "nav.php";  ?>
+<?php require "nav.php";  
+
+?>
+
+
+
+
+
+
+
 <!-- Affiche le contenu ds la variable $content -->
 <div id="wrapper">
 	<?= $content ?>
+	
 </div>
+
+
+
+
+<?php
+	if(!isset($_SESSION['produits']) || empty($_SESSION['produits'])){
+		echo "<p> Aucun produit en session...</p>";
+	}
+
+	else{
+		$totalGeneral = 0;
+		$totalQuantite = 0;
+
+		foreach ($_SESSION['produits'] as $index => $tableau) {
+				$index .
+				$tableau['produit'] . 
+				$tableau['quantite'] . 
+				$totalQuantite += $tableau['quantite'];
+		}
+			
+		number_format($totalQuantite,0,",","&nbsp;");			
+		echo $totalQuantite." ". "Articles" ;	
+
+
+
+	}
+
+
+
+?>
 
 
 </body>

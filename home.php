@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 ob_start();
 
 ?>
@@ -12,6 +12,7 @@ Tempora alias cum impedit laudantium minus facere harum iste nostrum quisquam. M
 Exercitationem a magni vel eligendi, inventore amet quaerat veniam qui. Tempora, quas dicta necessitatibus odit quia placeat illum eveniet, quo architecto ea consequuntur sapiente dolore at earum? Quia, accusamus. Et.
 Corrupti optio mollitia nisi asperiores, id excepturi nostrum numquam dolorem dolor. Necessitatibus modi iure culpa blanditiis fugit! Dicta deserunt incidunt placeat ipsum dolores veniam doloribus quia! Repellendus quia provident veritatis?
 Dolor officia necessitatibus eum voluptas labore corrupti veniam dolorem numquam atque itaque accusamus laborum consequatur, optio a fuga placeat quia sapiente error ullam perspiciatis omnis reiciendis quos? Ea, id? Nulla!</p>
+
 
 <?php
 

@@ -2,6 +2,7 @@
 	session_start();
 	$id = (isset($_GET["id"])) ? $_GET["id"] : null;
 	$quantite = (isset($_GET["quantite"])) ? $_GET["quantite"] : null;
+	$description = (isset($_GET["description"])) ? $_GET["description"] : null;
 
 
 
@@ -22,14 +23,33 @@ if(isset($_GET['action'])){
 				$produit = filter_input(INPUT_POST, "produit" ,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 				$prix = filter_input(INPUT_POST,"prix",FILTER_VALIDATE_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
 				$quantite = filter_input(INPUT_POST, "quantite",FILTER_VALIDATE_INT);
+				$description = filter_input(INPUT_POST, "description" ,FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+
+
+			if (isset($_FILES['file'])) {
+		         $tmpName = $_FILES['file']['tmp_name'];
+		         $name = $_FILES['file']['name'];
+		         $destination = __DIR__ . '/upload/' . $name;
+
+            if (move_uploaded_file($tmpName, $destination)) {
+                $file = 'upload/' . $name; 
+            } else {
+                echo "Échec du téléchargement.";
+                exit; 
+            }
+        }
+
 			
-					if ($produit && $prix && $quantite){
+	if($produit && $prix && $quantite && $description && isset($file)){
 
 						$tableau = [
+							"file" => $file,
 							"produit" => $produit,
 							"prix" => $prix,
 							"quantite" => $quantite,
 							"total" => $prix * $quantite,
+							"description" => $description,
 						];
 
 						$_SESSION['produits'][] = $tableau;						
@@ -93,6 +113,9 @@ if(isset($_GET['action'])){
     	$_SESSION['message'] = "Un produit vient d'être retirer du stock";
 		break;
 	}
+
+
+
 	}
 }
 

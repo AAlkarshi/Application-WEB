@@ -32,5 +32,32 @@ nav ul li a{
 	color: grey;
 }
 
+/* Bordure noir qui englobe toute le tableau */
+#wrapper > table{
+	border: 5px solid black;
+	width: 100%;
+}
+
+/* Bordure noir qui englobe entre les éléments */
+#wrapper > table > tbody > tr{
+	border: 1px solid black;
+}
+
+/* Permet de centrer les élements */
+#wrapper > table > tbody > tr > td{
+	text-align: center;
+	align-items: center;
+}
 
 
+/* Permet d'enlever les trait sous les btn - et +  */
+#wrapper > table > tbody > tr > td > a{
+	text-decoration: none;
+	
+}
+
+/* Permet de centrer les titres au dessus des élements */
+#wrapper > table > thead > tr > th{
+	text-align: center;
+	align-items: center;	
+}
