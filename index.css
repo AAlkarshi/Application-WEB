@@ -1,3 +1,6 @@
+html{
+	overflow-x: hidden;
+}
 h3{
 	font-size: 35px;
 	color: grey;
@@ -32,32 +35,260 @@ nav ul li a{
 	color: grey;
 }
 
+/*
+#wrapper {
+    width: 100%; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 20px; 
+}
+*/
+
 /* Bordure noir qui englobe toute le tableau */
-#wrapper > table{
-	border: 5px solid black;
+body > div > table{
+    border: 5px solid black;
 	width: 100%;
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0 auto; 
+    padding: 20px;
 }
 
 /* Bordure noir qui englobe entre les éléments */
-#wrapper > table > tbody > tr{
+table > tbody > tr{
 	border: 1px solid black;
 }
 
-/* Permet de centrer les élements */
-#wrapper > table > tbody > tr > td{
+/* Centrer les élements */
+table > tbody > tr > td{
 	text-align: center;
 	align-items: center;
 }
 
-
-/* Permet d'enlever les trait sous les btn - et +  */
-#wrapper > table > tbody > tr > td > a{
+/* Enlever les trait sous les btn - et +  */
+table > tbody > tr > td > a{
 	text-decoration: none;
 	
 }
 
-/* Permet de centrer les titres au dessus des élements */
-#wrapper > table > thead > tr > th{
+/* Centrer les titres */
+table > thead > tr > th{
 	text-align: center;
 	align-items: center;	
 }
+
+
+
+/* btn de modification de quantité */
+.btn-modif {
+    background-color: black; 
+    color: white; 
+    border: none; 
+    padding: 5px 10px; 
+    cursor: pointer; 
+}
+
+/*survol btn + et - */
+.btn-modif:hover {
+    background-color: grey; 
+}
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+    justify-content: center;
+    align-items: center; 
+    background-color: #f0f0f0;
+}
+
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    flex-grow: 1; 
+}
+
+/* FAQ */
+.faq-container {
+    width: 80%;
+    max-width: 800px;
+    margin-top: 20px;
+    height: 100%; 
+}
+
+
+.faq-item {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ccc;
+}
+
+.faq-question {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.faq-answer {
+    margin-top: 5px;
+	font-size: 15px;
+}
+
+
+
+/* Formulaire de connexion */
+.custom-form {
+    width: 100%;
+    padding: 20px;
+    border: 2px solid #ffffff;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; 
+}
+
+.form-container {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 2px solid #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    height: 100%;
+}
+
+.form-connexion {
+    width: 100%;
+    max-width: 800px;
+    padding: 40px;
+    margin: 40px auto; 
+    border: 2px solid #ffffff;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* FORM AJOUT PRODUIT */
+.formajoutproduit {
+    width: 50%; 
+    height: 100%; 
+    padding: 20px;
+    border: 2px solid #ffffff;
+    background-color: #ffffff; 
+    border-radius: 10px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    text-align: center; 
+    margin-top: 20px; 
+}
+
+/*RECAP*/
+table {
+	width: 80%;
+	margin: 20px auto;
+	border-collapse: collapse;
+}
+table th, table td {
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
+}
+table th {
+	background-color: #f2f2f2;
+}
+.produit-img {
+	max-width: 100px;
+	max-height: 100px;
+    display: block; 
+    margin: 0 auto;
+}
+.quantity-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	
+	border: none;
+}
+.quantity-container form {
+	display: inline;
+	margin: 0;
+}
+.quantity-container button {
+	padding: 5px 10px;
+}
+.quantity-span {
+	display: flex;
+	justify-content: center;
+	width: 100%;   
+	height: 100%;
+}
+
+/* FOOTER */
+footer {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: auto; 
+}
+
+
+
+
+
+
+.form-reset {
+    width: 100%;
+    height: 100%;
+    max-width: 600px;
+    padding: 20px;
+    border: 2px solid #ffffff;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.form-reset form {
+    width: 100%;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+input {
+    width: calc(100% - 22px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+input[type="submit"] {
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.message {
+    color: red;
+    margin-bottom: 15px;
+}
+
+

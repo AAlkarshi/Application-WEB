@@ -1,116 +1,123 @@
 <?php
-	session_start();
-	ob_start();
+session_start();
+ob_start();
+
+// Vérification de l'ID utilisateur depuis la session
+$id_utilisateur = $_SESSION['ID_Utilisateur'];
+
+// Connexion à la base de données
+$servername = "localhost";
+$username = "root";
+$password = "changeme";
+$dbname = "appweb";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("La connexion à la base de données a échoué : " . $conn->connect_error);
+}
+
+// Fonction pour supprimer un produit
+function supprimerProduit($conn, $id_produit) {
+    // Supprimer d'abord les enregistrements de la table `choisir`
+    $sql_supprimer_choisir = "DELETE FROM choisir WHERE ID_Produit = ?";
+    $stmt_supprimer_choisir = $conn->prepare($sql_supprimer_choisir);
+    $stmt_supprimer_choisir->bind_param("i", $id_produit);
+    $stmt_supprimer_choisir->execute();
+    $stmt_supprimer_choisir->close();
+
+    // Puis supprimer le produit de la table `produit`
+    $sql_supprimer_produit = "DELETE FROM produit WHERE ID_Produit = ?";
+    $stmt_supprimer_produit = $conn->prepare($sql_supprimer_produit);
+    $stmt_supprimer_produit->bind_param("i", $id_produit);
+    $stmt_supprimer_produit->execute();
+    $stmt_supprimer_produit->close();
+}
+
+// Récupération des produits associés à l'utilisateur depuis la table choisir
+$sql_recuperer_produits = "SELECT p.*, c.ID_Utilisateur FROM produit p INNER JOIN choisir c ON p.ID_Produit = c.ID_Produit WHERE c.ID_Utilisateur = ?";
+$stmt_recuperer_produits = $conn->prepare($sql_recuperer_produits);
+$stmt_recuperer_produits->bind_param("i", $id_utilisateur);
+$stmt_recuperer_produits->execute();
+$resultat = $stmt_recuperer_produits->get_result();
+
+// Tableau pour stocker les produits à afficher
+$produits = array();
+$total_general = 0;
+$total_quantite = 0;
+
+// Suppression des produits avec quantité <= 0
+while ($row = $resultat->fetch_assoc()) {
+    if ($row['QuantiteProduit'] > 0) {
+        $produits[] = $row; // Ajouter le produit au tableau des produits à afficher
+        $total_general += $row['PrixProduit'] * $row['QuantiteProduit']; // Calculer le total général
+        $total_quantite += $row['QuantiteProduit']; // Calculer le total des quantités
+    } else {
+        supprimerProduit($conn, $row['ID_Produit']);
+        $_SESSION['message'] = "Produit supprimé car la quantité est devenue 0.";
+    }
+}
+$stmt_recuperer_produits->close();
+
+function calculerTotal($prix, $quantite) {
+    return $prix * $quantite;
+}
 ?>
 
-	<h3> Récapitulatif des Produits </h3>
-	<?php $title = "Récapitulatif"; ?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>Récapitulatif des Produits</title>
+</head>
+<body>
+    <h2>Récapitulatif de vos Produits</h2>
+    <br>
+    <table>
+    <thead>
+        <tr>
+            <th>Produit</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Total</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($produits as $row) : ?>
+            <tr>
+                <td><?php echo $row['NomProduit']; ?></td>
+                <td><?php echo $row['PrixProduit']; ?> €</td>
+                <td class="quantity-container">
+                    <form action="traitement.php?action=diminuerQuantite&id_produit=<?php echo $row['ID_Produit']; ?>" method="post" style="display: inline;">
+                        <input type="hidden" name="quantite_actuelle" value="<?php echo $row['QuantiteProduit']; ?>">
+                        <button type="submit" name="diminuer" class="btn-modif">-</button>
+                    </form>
+                    <span class="quantity-span"><?php echo $row['QuantiteProduit']; ?></span>
+                    <form action="traitement.php?action=augmenterQuantite&id_produit=<?php echo $row['ID_Produit']; ?>" method="post" style="display: inline;">
+                        <input type="hidden" name="quantite_actuelle" value="<?php echo $row['QuantiteProduit']; ?>">
+                        <button type="submit" name="augmenter" class="btn-modif">+</button>
+                    </form>
+                </td>
+                <td><?php echo calculerTotal($row['PrixProduit'], $row['QuantiteProduit']); ?> €</td>
+                <td><img src="<?php echo $row['ImageProduit']; ?>" alt="<?php echo $row['NomProduit']; ?>" class="produit-img"></td>
+            </tr>
+        <?php endforeach; ?>
+        <tr>
+            <td colspan="2" style="text-align: right;"><strong>Total:</strong></td>
+            <td><strong><?php echo $total_quantite . " produits" ?></strong></td>
+            <td><strong><?php echo $total_general; ?> €</strong></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
 
 <?php
-
-	if(!isset($_SESSION['produits']) || empty($_SESSION['produits'])){
-		echo "<p>  </p>";
-	}
-	
-	else{
-		echo "<table>",
-				"<thead>",
-					"<tr>",
-						"<th>#</th>",
-						"<th>Images</th>",
-						"<th>Nom</th>",
-						"<th>Prix</th>",
-						"<th>Réduire </th>",
-						"<th>Quantité</th>",
-						"<th>Augmenter </th>",
-						"<th>Total</th>",
-						"<th>Description</th>",
-						"<th>Suppression</th>",
-					"</tr>",
-				"</thead>",
-
-			"<tbody>";
-
-		$totalGeneral = 0;
-		$totalQuantite = 0;
-
-		foreach ($_SESSION['produits'] as $index => $tableau) {
-		echo "<tr>",
-				"<td>" . $index . "</td>",
-
-
-				// file
-				"<td>";
-				    if (isset($tableau['file'])) {
-				        echo "<img src='" . htmlspecialchars($tableau['file']) .
-				         "' alt='file' style='width: 50px; height: 50px;'>";
-				    } else {
-				        echo "Pas d'file"; 
-				    }
-
-    			echo "</td>",
-
-          
-
-
-				"<td>" . $tableau['produit'] . "</td>",
-
-				// PRIX
-				"<td>".number_format($tableau['prix'],2,",","&nbsp;")."&nbsp;€</td>",
-
-				// BTN -
-				"<td> <a href='traitement.php?action=BtnDiminution&id=$index''> - </a> </td>",
-	
-				//QUANTITE
-				"<td>" . $tableau['quantite'] . "</td>",
-
-				// BTN +
-				"<td> <a href='traitement.php?action=BtnAugmentation&id=$index'> + </a> </td>",
-
-				//TOTAL
-				"<td>".number_format($tableau['total'],2,",","&nbsp;")."&nbsp;€</td>",
-
-				//DESCRIPTION
-				"<td>". $tableau['description'] . "</td>",
-
-
-				//SUPP CE PRODUIT
-				"<td> 
-					<a href='traitement.php?action=suppProduit&id=$index'> Supprimer ce produit </a> 
-				</td>",	
-			"</tr>";
-
-					
-					$totalGeneral += $tableau['total'];
-					$totalQuantite += $tableau['quantite'];
-		}    
-
-			echo "<tr>",
-
-					"<td colspan=2> Total des Quantité : </td>",
-					"<td> <strong>". number_format($totalQuantite,0,",","&nbsp;")."&nbsp;</strong></td>",
-					"<td colspan=2> Total géneral : </td>",
-					"<td> <strong>". number_format($totalGeneral,2,",","&nbsp;")."&nbsp;€</strong> </td>" ,
-			"<td> <a href='traitement.php?action=viderPanier'> Supprimer tout les produits</a> </td>",
-				 "</tr>",
-			 "</tbody>",
-		"</table>";
-
-
-
-
-
-
-
-	}
-	
-
-
-
-
 $content = ob_get_clean();
 require_once "template.php";
-
-
+$conn->close();
 ?>
-
